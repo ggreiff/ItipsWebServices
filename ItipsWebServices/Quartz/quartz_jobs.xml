@@ -1,0 +1,122 @@
+<Schedules>
+  <Job>
+    <Name>SendEmailJob</Name>
+    <Group>SendEmailGroup</Group>
+    <Description>Sample job for Quartz Server</Description>
+    <Jobtype>Quartz.Job.SendMailJob, Quartz.Jobs</Jobtype>
+    <Durable>true</Durable>
+    <Recover>false</Recover>
+    <JobDataMap>
+      <Entry>
+        <Key>smtp_host</Key>
+        <Value>localhost</Value>
+      </Entry>
+      <Entry>
+        <Key>smtp_port</Key>
+        <Value>25</Value>
+      </Entry>
+      <Entry>
+        <Key>recipient</Key>
+        <Value>gcubed@ggreiff.com</Value>
+      </Entry>
+      <Entry>
+        <Key>sender</Key>
+        <Value>gene.greiff@ggreiff.com</Value>
+      </Entry>
+      <Entry>
+        <Key>subject</Key>
+        <Value>Alert</Value>
+      </Entry>
+    </JobDataMap>
+  </Job>
+  <Job>
+    <Name>ComplianceStatus</Name>
+    <Group>CategoryConditionMet</Group>
+    <Description>Compliance Status Notifications</Description>
+    <Jobtype>ItipsWebServices.Jobs.CategoryConditionMet.ComplianceStatus, ItipsWebServices.Jobs.CategoryConditionMet</Jobtype>
+    <Durable>true</Durable>
+    <Recover>false</Recover>
+    <JobDataMap>
+      <Entry>
+        <Key>ConnectionString</Key>
+        <Value>Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=oyster)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=orcl)));User Id=itips;Password=eneG6242; Connection Timeout=60;</Value>
+      </Entry>
+      <Entry>
+        <Key>CategoryValues</Key>
+        <Value>
+          select cp.name, cv.time_stamp, case when cp.x_enum_type_id is null then nvl(cv.x_value,' ') else ev.value end as Value
+          from PS_V_CELL_ONLY_CURRENT_VALUE cv
+          inner join ps_category_prop cp on cp.category_id = cv.category_id
+          inner join PS_SCORECARD_CATEGORIES sc on sc.category_id = cp.category_id
+          inner join PS_SCORECARD_PROP sp on sp.scorecard_id = sc.scorecard_id
+          left outer join PS_ENUM_VALUE ev on ev.TYPE_ID = cp.X_ENUM_TYPE_ID and ev.VALUE_ID = cv.X_VALUE
+          where sp.name = 'Alert Notifications'
+          and cv.portfolio_id = :portfolioId
+        </Value>
+      </Entry>
+      <Entry>
+        <Key>GroupMembers</Key>
+        <Value>
+          select up.first_name, up.last_name, up.email, is_enabled
+          from ps_user_group_prop gp
+          inner join PS_USER_GROUP_HIERARCHY gh on gh.GROUP_ID = gp.GROUP_ID
+          inner join ps_user_prop up on up.User_id = gh.SUB_USER_ID
+          where Name like :groupName
+        </Value>
+      </Entry>
+    </JobDataMap>
+  </Job>
+  <Job>
+    <Name>sampleJob</Name>
+    <Group>sampleGroup</Group>
+    <Description>Sample job for Quartz Server</Description>
+    <Jobtype>Quartz.Server.SampleJob, Quartz.Server</Jobtype>
+    <Durable>true</Durable>
+    <Recover>false</Recover>
+    <JobDataMap>
+      <Entry>
+        <Key>key1</Key>
+        <Value>value1</Value>
+      </Entry>
+      <Entry>
+        <Key>key2</Key>
+        <Value>value2</Value>
+      </Entry>
+    </JobDataMap>
+  </Job>
+  <Trigger>
+    <Simple>
+      <Name>sampleSimpleTrigger</Name>
+      <Group>sampleSimpleGroup</Group>
+      <Description>Simple trigger to simply fire sample job</Description>
+      <JobName>sampleJob</JobName>
+      <JobGroup>sampleGroup</JobGroup>
+      <MisfireInstruction>SmartPolicy</MisfireInstruction>
+      <RepeatCount>-1</RepeatCount>
+      <RepeatInterval>10000</RepeatInterval>
+    </Simple>
+  </Trigger>
+  <Trigger>
+    <Cron>
+      <Name>sampleCronTrigger</Name>
+      <Group>sampleCronGroup</Group>
+      <Description>Cron trigger to simply fire sample job</Description>
+      <JobName>sampleJob</JobName>
+      <JobGroup>sampleGroup</JobGroup>
+      <MisfireInstruction>SmartPolicy</MisfireInstruction>
+      <CronExpression>0 0 12 * * ?</CronExpression>
+    </Cron>
+  </Trigger>
+  <Trigger>
+    <CalendarInterval>
+      <Name>sampleCalendarIntervalTrigger</Name>
+      <Group>sampleCalendarIntervalGroup</Group>
+      <Description>Calendar interval trigger to simply fire sample job</Description>
+      <JobName>sampleJob</JobName>
+      <JobGroup>sampleGroup</JobGroup>
+      <MisfireInstruction>SmartPolicy</MisfireInstruction>
+      <RepeatInterval>600</RepeatInterval>
+      <RepeatIntervalUnit>Second</RepeatIntervalUnit>
+    </CalendarInterval>
+  </Trigger>
+</Schedules>

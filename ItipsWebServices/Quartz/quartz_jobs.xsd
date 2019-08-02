@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Schedules">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="Job">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Name" type="xs:string" />
+              <xs:element name="Group" type="xs:string" />
+              <xs:element name="Description" type="xs:string" />
+              <xs:element name="Jobtype" type="xs:string" />
+              <xs:element name="Durable" type="xs:boolean" />
+              <xs:element name="Recover" type="xs:boolean" />
+              <xs:element name="JobDataMap">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="Entry">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Key" type="xs:string" />
+                          <xs:element name="Value" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" name="Trigger">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="CalendarInterval">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Name" type="xs:string" />
+                    <xs:element name="Group" type="xs:string" />
+                    <xs:element name="Description" type="xs:string" />
+                    <xs:element name="JobName" type="xs:string" />
+                    <xs:element name="JobGroup" type="xs:string" />
+                    <xs:element name="MisfireInstruction" type="xs:string" />
+                    <xs:element name="RepeatInterval" type="xs:unsignedShort" />
+                    <xs:element name="RepeatIntervalUnit" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="Cron">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Name" type="xs:string" />
+                    <xs:element name="Group" type="xs:string" />
+                    <xs:element name="Description" type="xs:string" />
+                    <xs:element name="JobName" type="xs:string" />
+                    <xs:element name="JobGroup" type="xs:string" />
+                    <xs:element name="MisfireInstruction" type="xs:string" />
+                    <xs:element name="CronExpression" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="Simple">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Name" type="xs:string" />
+                    <xs:element name="Group" type="xs:string" />
+                    <xs:element name="Description" type="xs:string" />
+                    <xs:element name="JobName" type="xs:string" />
+                    <xs:element name="JobGroup" type="xs:string" />
+                    <xs:element name="MisfireInstruction" type="xs:string" />
+                    <xs:element name="RepeatCount" type="xs:byte" />
+                    <xs:element name="RepeatInterval" type="xs:unsignedShort" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
